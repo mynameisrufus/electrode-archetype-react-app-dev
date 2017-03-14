@@ -1,0 +1,186 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "electrode-archetype-react-app-dev@^2.0.0",
+        "scope": null,
+        "escapedName": "electrode-archetype-react-app-dev",
+        "name": "electrode-archetype-react-app-dev",
+        "rawSpec": "^2.0.0",
+        "spec": ">=2.0.0 <3.0.0",
+        "type": "range"
+      },
+      "/Users/rufus/Projects/www-le-customer"
+    ]
+  ],
+  "_from": "electrode-archetype-react-app-dev@>=2.0.0 <3.0.0",
+  "_id": "electrode-archetype-react-app-dev@2.0.2",
+  "_inCache": true,
+  "_location": "/electrode-archetype-react-app-dev",
+  "_nodeVersion": "6.9.2",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/electrode-archetype-react-app-dev-2.0.2.tgz_1487716082689_0.19527216721326113"
+  },
+  "_npmUser": {
+    "name": "jchip",
+    "email": "joel123@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "electrode-archetype-react-app-dev@^2.0.0",
+    "scope": null,
+    "escapedName": "electrode-archetype-react-app-dev",
+    "name": "electrode-archetype-react-app-dev",
+    "rawSpec": "^2.0.0",
+    "spec": ">=2.0.0 <3.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/electrode-archetype-react-app-dev/-/electrode-archetype-react-app-dev-2.0.2.tgz",
+  "_shasum": "94a388f3c63fcc23f9b2486c8a9cbb1e268fc213",
+  "_shrinkwrap": null,
+  "_spec": "electrode-archetype-react-app-dev@^2.0.0",
+  "_where": "/Users/rufus/Projects/www-le-customer",
+  "bugs": {
+    "url": "https://github.com/electrode-io/electrode/issues"
+  },
+  "dependencies": {
+    "autoprefixer-stylus": "^0.9.1",
+    "babel-cli": "^6.4.5",
+    "babel-core": "^6.4.0",
+    "babel-eslint": "^7.0.0",
+    "babel-loader": "^6.2.1",
+    "babel-plugin-lodash": "^3.1.3",
+    "babel-plugin-react-intl": "^2.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.3.13",
+    "babel-plugin-transform-react-constant-elements": "^6.5.0",
+    "babel-plugin-transform-react-inline-elements": "^6.6.5",
+    "babel-plugin-transform-runtime": "^6.8.0",
+    "babel-polyfill": "^6.5.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2015-loose": "^7.0.0",
+    "babel-preset-es2015-node": "^6.1.1",
+    "babel-preset-react": "^6.3.13",
+    "chai": "^3.2.0",
+    "chai-shallowly": "^0.9.10",
+    "chalk": "^1.1.1",
+    "clean-css": "^3.4.21",
+    "css-loader": "^0.26.1",
+    "css-split-webpack-plugin": "^0.2.0",
+    "electrode-bundle-analyzer": "^1.0.0",
+    "electrode-cdn-file-loader": "^1.0.0",
+    "electrode-electrify": "^1.0.0",
+    "electrode-gulp-helper": "^1.0.5",
+    "electrode-webpack-reporter": "^0.2.4",
+    "eslint": "^3.9.1",
+    "eslint-config-walmart": "^1.1.0",
+    "eslint-plugin-filenames": "^1.1.0",
+    "eslint-plugin-react": "^6.5.0",
+    "extract-text-webpack-plugin": "^2.0.0-rc.2",
+    "favicons": "^4.8.3",
+    "file-loader": "^0.8.4",
+    "fs-extra": "^0.26.5",
+    "glob": "^7.0.6",
+    "gulp": "^3.9.1",
+    "gulp-envify": "^1.0.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-uglify": "^2.0.0",
+    "isomorphic-loader": "^1.0.0",
+    "isparta-loader": "^2.0.0",
+    "istanbul": "^0.3.18",
+    "json-loader": "^0.5.3",
+    "jsonfile": "^2.2.2",
+    "karma": "^1.4.1",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-intl-shim": "^1.0.3",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-phantomjs-shim": "^1.4.0",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.26",
+    "karma-webpack": "^2.0.2",
+    "loader-utils": "^0.2.14",
+    "lodash": "^4.13.1",
+    "mkdirp": "^0.5.1",
+    "mocha": "^2.3.3",
+    "nodemon": "^1.8.1",
+    "offline-plugin": "^4.6.1",
+    "optional-require": "^1.0.0",
+    "penthouse": "^0.10.3",
+    "phantomjs-prebuilt": "^2.1.13",
+    "postcss-cssnext": "^2.7.0",
+    "postcss-import": "^9.1.0",
+    "postcss-loader": "^0.11.1",
+    "raw-loader": "^0.5.1",
+    "react": "^15.3.0",
+    "react-addons-test-utils": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "react-hot-loader": "^1.2.8",
+    "react-intl": "^2.1.0",
+    "rimraf": "^2.4.0",
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0",
+    "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-relative-loader": "^3.0.0",
+    "sw-precache": "^4.3.0",
+    "sw-precache-webpack-plugin": "^0.8.0",
+    "sw-toolbox": "^3.4.0",
+    "url-loader": "^0.5.6",
+    "web-app-manifest-loader": "^0.1.1",
+    "webpack": "^2.2.0",
+    "webpack-config": "^6.1.3",
+    "webpack-dev-server": "^2.2.0",
+    "webpack-disk-plugin": "0.0.2",
+    "webpack-partial": "^1.1.2",
+    "webpack-stats-plugin": "^0.1.1"
+  },
+  "description": "Electrode NodeJS/React Application Archetype (Development)",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "94a388f3c63fcc23f9b2486c8a9cbb1e268fc213",
+    "tarball": "https://registry.npmjs.org/electrode-archetype-react-app-dev/-/electrode-archetype-react-app-dev-2.0.2.tgz"
+  },
+  "engines": {
+    "node": "^4.4.6 || ^6.2.1",
+    "npm": "^3.5.3"
+  },
+  "homepage": "http://www.electrode.io",
+  "license": "Apache-2.0",
+  "maintainers": [
+    {
+      "name": "caoyangs",
+      "email": "wuwa007@gmail.com"
+    },
+    {
+      "name": "jchip",
+      "email": "joel123@gmail.com"
+    },
+    {
+      "name": "nanavatiarpan",
+      "email": "nanavatiarpan@gmail.com"
+    }
+  ],
+  "name": "electrode-archetype-react-app-dev",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "electrode-archetype-react-app": "^2.0.0"
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electrode-io/electrode.git"
+  },
+  "scripts": {},
+  "version": "2.0.2"
+}
