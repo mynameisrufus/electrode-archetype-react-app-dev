@@ -34,6 +34,7 @@ var AppMode = archetype.AppMode;
 
 var cssNextExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.css")).length > 0);
 var stylusExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.styl")).length > 0);
+var sassExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.scss")).length > 0);
 
 // By default, this archetype assumes you are using CSS-Modules + CSS-Next
 var cssModuleSupport = true;
@@ -46,19 +47,78 @@ module.exports = function () {
   return function (config) {
     var cssModuleStylusSupport = archetype.webpack.cssModuleStylusSupport;
     var stylusQuery = cssLoader + "?-autoprefixer!" + stylusLoader;
-    var cssQuery = cssLoader + "?modules&-autoprefixer!" + postcssLoader;
-    var cssQuery = `${cssLoader}?modules&-autoprefixer&localIdentName=[name]__[local]!${postcssLoader}`
+    var cssQuery = cssLoader + "?modules&-autoprefixer&localIdentName=[name]__[local]!" + postcssLoader;
     var cssStylusQuery = cssLoader + "?modules&-autoprefixer!" + postcssLoader + "!" + stylusLoader;
 
     // By default, this archetype assumes you are using CSS-Modules + CSS-Next
     var rules = [
       {
+        test: /\.css$/,
+        exclude: /\.module\.css$/,
+        loader: ExtractTextPlugin.extract({fallback: styleLoader, use: cssLoader, publicPath: ""})
+      },
+      {
         test: /\.module\.css$/,
         loader: ExtractTextPlugin.extract({fallback: styleLoader, use: cssQuery, publicPath: ""})
       },
       {
-        test: /\.global\.css$/,
-        loader: ExtractTextPlugin.extract({fallback: styleLoader, use: cssLoader, publicPath: ""})
+        test: /\.scss$/,
+        exclude: /\.module\.scss$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          use: [{
+            loader: 'css-loader',
+            options: {
+              localIdentName: "[name]__[local]",
+              sourceMap: true
+            }
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          }, {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              includePaths: [config.context]
+            }
+          }]
+        })
+      }, {
+				test: /\.module\.scss$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
+          use: [{
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: "[name]__[local]",
+              sourceMap: true
+            }
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true
+            }
+          }, {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              includePaths: [config.context]
+            }
+          }]
+        })
       }
     ];
 
@@ -71,20 +131,6 @@ module.exports = function () {
       rules.push({
         test: /\.styl$/,
         loader: ExtractTextPlugin.extract({fallback: styleLoader, use: stylusQuery, publicPath: ""})
-      });
-    }
-
-    if (cssModuleSupport) {
-      rules.push({
-        test: /\.scss$/,
-        use: [
-          {
-            loader: "postcss-loader",
-            options: {
-              browsers: ["last 2 versions", "ie >= 9", "> 5%"]
-            }
-          }
-        ]
       });
     }
 
