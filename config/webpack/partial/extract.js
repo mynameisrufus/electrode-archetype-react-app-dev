@@ -47,7 +47,7 @@ module.exports = function () {
   return function (config) {
     var cssModuleStylusSupport = archetype.webpack.cssModuleStylusSupport;
     var stylusQuery = cssLoader + "?-autoprefixer!" + stylusLoader;
-    var cssQuery = cssLoader + "?modules&-autoprefixer&localIdentName=[name]__[local]!" + postcssLoader;
+    var cssQuery = cssLoader + "?modules&-autoprefixer&localIdentName=[name]__[local]___[hash:base64:5]!" + postcssLoader;
     var cssStylusQuery = cssLoader + "?modules&-autoprefixer!" + postcssLoader + "!" + stylusLoader;
 
     // By default, this archetype assumes you are using CSS-Modules + CSS-Next
@@ -74,7 +74,7 @@ module.exports = function () {
           use: [{
             loader: 'css-loader',
             options: {
-              localIdentName: "[name]__[local]",
+              localIdentName: "[name]__[local]___[hash:base64:5]",
               sourceMap: true
             }
           }, {
@@ -85,8 +85,7 @@ module.exports = function () {
           }, {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-              includePaths: [config.context]
+              sourceMap: true
             }
           }]
         })
@@ -103,7 +102,7 @@ module.exports = function () {
             loader: 'css-loader',
             options: {
               modules: true,
-              localIdentName: "[name]__[local]",
+              localIdentName: "[name]__[local]___[hash:base64:5]",
               sourceMap: true
             }
           }, {
@@ -114,8 +113,7 @@ module.exports = function () {
           }, {
             loader: 'sass-loader',
             options: {
-              sourceMap: true,
-              includePaths: [config.context]
+              sourceMap: true
             }
           }]
         })
@@ -147,6 +145,7 @@ module.exports = function () {
         new CSSSplitPlugin({size: 4000, imports: true, preserve: true}),
         new webpack.LoaderOptionsPlugin({
           options: {
+            context: Path.resolve(process.cwd(), "client"),
             postcss: function () {
               return cssModuleSupport ? [atImport, cssnext({
                 browsers: ["last 2 versions", "ie >= 9", "> 5%"]
