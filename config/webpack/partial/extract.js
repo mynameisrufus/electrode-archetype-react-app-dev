@@ -4,153 +4,105 @@ var archetype = require("../../archetype");
 var Path = archetype.Path;
 var mergeWebpackConfig = require("webpack-partial").default;
 const webpack = require("webpack");
-var glob = require("glob");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CSSSplitPlugin = require("css-split-webpack-plugin").default;
-// TODO: fix postcss for webpack 2.0
 var atImport = require("postcss-import");
 var cssnext = require("postcss-cssnext");
 
-var autoprefixer = require("autoprefixer-stylus");
-var cssLoader = require.resolve("css-loader");
 var styleLoader = require.resolve("style-loader");
-var stylusLoader = require.resolve("stylus-relative-loader");
+var cssLoader = require.resolve("css-loader");
 var postcssLoader = require.resolve("postcss-loader");
+var sassLoader = require.resolve("sass-loader");
+var resolveUrlLoader = require.resolve("resolve-url-loader");
 
-var AppMode = archetype.AppMode;
+var hmr = process.env.HMR === "true";
 
-/**
- * [cssModuleSupport By default, this archetype assumes you are using CSS-Modules + CSS-Next]
- *
- * Stylus is also supported for which the following cases can occur.
- *
- * case 1: *only* *.css exists => CSS-Modules + CSS-Next
- * case 2: *only* *.styl exists => stylus
- * case 3: *both* *.css & *.styl exists => CSS-Modules + CSS-Next takes priority
- *          with a warning message
- * case 4: *none* *.css & *.styl exists => CSS-Modules + CSS-Next takes priority
- * case 5: *cssModuleStylusSupport* config is true => Use both Stylus and CSS Modules
- */
+var localIdentName = "[name]-[local]-[hash:base64:5]";
 
-var cssNextExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.css")).length > 0);
-var stylusExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.styl")).length > 0);
-var sassExists = (glob.sync(Path.resolve(AppMode.src.client, "**", "*.scss")).length > 0);
+function generateSCSSLoader(global) {
+  let sourceMap = hmr
+  let modules = !global
 
-// By default, this archetype assumes you are using CSS-Modules + CSS-Next
-var cssModuleSupport = true;
+  let loaders =  [{
+      loader: 'style-loader',
+      options: {
+        sourceMap: sourceMap
+      }
+  }, {
+    loader: 'css-loader',
+    options: {
+      localIdentName: localIdentName,
+      sourceMap: sourceMap,
+      autoprefixer: true,
+      modules: modules,
+      importLoaders: 3,
+      parser: 'postcss-scss'
+    }
+  }, {
+    loader: 'postcss-loader',
+    options: {
+      sourceMap: sourceMap,
+      browsers: ["last 2 versions", "ie >= 9", "> 5%"]
+    }
+  }, {
+    loader: 'resolve-url-loader',
+    options: {
+      sourceMap: sourceMap
+    }
+  }, {
+    loader: 'sass-loader',
+    options: {
+      sourceMap: true
+    }
+  }]
 
-if (stylusExists && !cssNextExists) {
-  cssModuleSupport = false;
+	let loader = {};
+
+  if (global) {
+    loader.test = /\.scss$/;
+    loader.exclude = /\.module\.scss$/;
+  }
+
+  if (!global) {
+    loader.test =  /\.module\.scss$/;
+	}
+
+  if (hmr) {
+    loader.loaders = loaders;
+  }
+
+  if (!hmr) {
+    loader.loader = ExtractTextPlugin.extract({
+      fallback: loaders[0],
+      use: loaders.slice(1),
+      publicPath: ""
+    })
+  }
+
+  return loader
 }
 
 module.exports = function () {
   return function (config) {
-    var cssModuleStylusSupport = archetype.webpack.cssModuleStylusSupport;
-    var stylusQuery = cssLoader + "?-autoprefixer!" + stylusLoader;
-    var cssQuery = cssLoader + "?modules&-autoprefixer&localIdentName=[name]-[local]-[hash:base64:5]!" + postcssLoader;
-    var cssStylusQuery = cssLoader + "?modules&-autoprefixer!" + postcssLoader + "!" + stylusLoader;
 
-    // By default, this archetype assumes you are using CSS-Modules + CSS-Next
-    var rules = [
-      {
-        test: /\.scss$/,
-        exclude: /\.module\.scss$/,
-        loaders: [{
-          loader: 'style-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
-            loader: 'css-loader',
-            options: {
-              parser:'postcss-scss',
-              importLoaders: 1,
-              sourceMap: true
-            }
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
-          loader: 'resolve-url-loader',
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true
-          }
-        }]
-      }, {
-        test: /\.module\.scss$/,
-        loaders:[{
-          loader: 'style-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
-          loader: 'css-loader',
-          options: {
-            parser:'postcss-scss',
-            modules: true,
-            importLoaders: 1,
-            localIdentName: "[name]-[local]-[hash:base64:5]",
-            sourceMap: true
-          }
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
-          loader: 'resolve-url-loader',
-        }, {
-          loader: 'sass-loader',
-          options: {
-            sourceMap: true
-          }
-        }
-        ]
-      }
-    ];
-
-    if (cssModuleStylusSupport) {
-      rules.push({
-        test: /\.styl$/,
-        loader: ExtractTextPlugin.extract({fallback: styleLoader, use: cssStylusQuery, publicPath: "" })
-      });
-    } else if (!cssModuleSupport) {
-      rules.push({
-        test: /\.styl$/,
-        loader: ExtractTextPlugin.extract({fallback: styleLoader, use: stylusQuery, publicPath: ""})
-      });
-    }
+    let rules = [
+      generateSCSSLoader(true),
+      generateSCSSLoader(false)
+    ]
 
     return mergeWebpackConfig(config, {
       module: {rules},
       plugins: [
         new ExtractTextPlugin({filename: "[name].style.[hash].css"}),
-
-        /*
-         preserve: default: false. Keep the original unsplit file as well.
-         Sometimes this is desirable if you want to target a specific browser (IE)
-         with the split files and then serve the unsplit ones to everyone else.
-         */
         new CSSSplitPlugin({size: 4000, imports: true, preserve: true}),
         new webpack.LoaderOptionsPlugin({
           options: {
             context: Path.resolve(process.cwd(), "client"),
             postcss: function () {
-              return cssModuleSupport ? [atImport, cssnext({
+              return [atImport, cssnext({
                 browsers: ["last 2 versions", "ie >= 9", "> 5%"]
-              })] : [];
+              })];
             },
-            stylus: {
-              use: function () {
-                return !cssModuleSupport ? [autoprefixer({
-                  browsers: ["last 2 versions", "ie >= 9", "> 5%"]
-                })] : [];
-              }
-            }
           }
         })
       ]
