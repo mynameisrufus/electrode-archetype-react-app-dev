@@ -51,16 +51,26 @@ module.exports = function () {
     var cssStylusQuery = cssLoader + "?modules&-autoprefixer!" + postcssLoader + "!" + stylusLoader;
 
     // By default, this archetype assumes you are using CSS-Modules + CSS-Next
-    var rules = [
+    var rules = [];
+
+
+    rules: [
       {
         test: /\.scss$/,
-        exclude: /\.module\.scss$/,
-        loaders: [{
-          loader: 'style-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', 'sass-loader']
+        })
+      }
+    ]
+
+    rules.push({
+      test: /\.scss$/,
+      exclude: /\.module\.scss$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [{
             loader: 'css-loader',
             options: {
               parser:'postcss-scss',
@@ -80,14 +90,14 @@ module.exports = function () {
             sourceMap: true
           }
         }]
-      }, {
-        test: /\.module\.scss$/,
-        loaders:[{
-          loader: 'style-loader',
-          options: {
-            sourceMap: true
-          }
-        }, {
+      })
+    });
+
+    rules.push({
+      test: /\.module\.scss$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [{
           loader: 'css-loader',
           options: {
             parser:'postcss-scss',
@@ -108,10 +118,9 @@ module.exports = function () {
           options: {
             sourceMap: true
           }
-        }
-        ]
-      }
-    ];
+        }]
+      })
+    });
 
     if (cssModuleStylusSupport) {
       rules.push({
